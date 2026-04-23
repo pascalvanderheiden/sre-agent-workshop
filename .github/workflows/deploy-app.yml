@@ -45,6 +45,7 @@ jobs:
             --resource-group "rg-${{ env.WORKLOAD }}" \
             --query clientId -o tsv)
 
+<<<<<<< HEAD
           COSMOS_NAME=$(az cosmosdb list \
             --resource-group "rg-${{ env.WORKLOAD }}" \
             --query "[?starts_with(name, '${{ env.WORKLOAD }}-cosmos')].name | [0]" -o tsv)
@@ -57,8 +58,11 @@ jobs:
 
           COSMOS_ENDPOINT=$(az cosmosdb show \
             --name "$COSMOS_NAME" \
+=======
+          COSMOS_ENDPOINT=$(az cosmosdb list \
+>>>>>>> upstream/main
             --resource-group "rg-${{ env.WORKLOAD }}" \
-            --query documentEndpoint -o tsv)
+            --query "[0].documentEndpoint" -o tsv)
 
           echo "uami_client_id=$UAMI_CLIENT_ID" >> "$GITHUB_OUTPUT"
           echo "cosmos_endpoint=$COSMOS_ENDPOINT" >> "$GITHUB_OUTPUT"

@@ -7,13 +7,20 @@ param workloadName string
 @description('Resource tags')
 param tags object
 
+@description('Unique suffix for globally unique CosmosDB account name')
+param uniqueSuffix string
+
 // ──────────────────────────────────────────────
 // CosmosDB Account — NoSQL (Core) API, Serverless
 // ──────────────────────────────────────────────
 var cosmosAccountName = '${workloadName}-cosmos-${uniqueString(resourceGroup().id)}'
 
 resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2024-02-15-preview' = {
+<<<<<<< HEAD
   name: cosmosAccountName
+=======
+  name: '${workloadName}-cosmos-${uniqueSuffix}'
+>>>>>>> upstream/main
   location: location
   tags: tags
   kind: 'GlobalDocumentDB'

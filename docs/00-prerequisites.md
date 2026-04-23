@@ -112,22 +112,29 @@ GitHub Actions workflows in your fork need credentials to deploy infrastructure 
 
 ```bash
 az login
-az account show --query id -o tsv
+export SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+echo "Your subscription ID: $SUBSCRIPTION_ID"
 ```
 
-Save this ID — you'll need it in the next step.
+Keep this terminal open — you'll use `$SUBSCRIPTION_ID` in the next step.
 
 ### Create a Service Principal
-
-Replace `{SUBSCRIPTION_ID}` with the ID from above:
 
 ```bash
 az ad sp create-for-rbac \
   --name "sre-workshop-sp" \
   --role Contributor \
-  --scopes /subscriptions/{SUBSCRIPTION_ID} \
+  --scopes /subscriptions/$SUBSCRIPTION_ID \
   --json-auth
 ```
+
+> **⚠️ Tenant policy note:** Some Azure AD tenants enforce credential lifetime policies that may cause this command to fail. If you see an error about credential expiry or policy restrictions, reset the service principal credentials with a shorter lifetime:
+>
+> ```bash
+> az ad sp credential reset --name "sre-workshop-sp" --years 1
+> ```
+>
+> Always delete the service principal when done with the workshop (see Module 7).
 
 This command outputs a JSON block containing the service principal credentials. **Copy the entire JSON output** — you'll paste it into GitHub next.
 
@@ -195,6 +202,6 @@ You're about to provision real Azure resources that incur hourly charges. The wo
 
 ## Next Step
 
-→ **Module 1: Deploy Infrastructure**
+→ **[Module 1: Deploy Infrastructure](./01-deploy-infrastructure.md)**
 
 Ready? Proceed to Module 1 to deploy the AKS cluster, CosmosDB, monitoring, and managed identity resources using Bicep.
