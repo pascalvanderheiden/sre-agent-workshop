@@ -5,7 +5,7 @@
 - **Project:** A hands-on workshop introducing Azure SRE Agent capabilities within AKS through guided scenarios and Bicep infrastructure
 - **Role:** Scenario Dev
 - **Joined:** 2026-04-12T08:49:21.226Z
-- **Note (2026-04-23):** Container image in GHCR must be public for the workshop to work end-to-end; `publish-image.yml` pushes to ghcr.io but attendees' forks must sync upstream and publish their own images publicly
+- **Note (2026-04-23):** Container image in GHCR must be public for the workshop to work end-to-end; `publish-image.yml` pushes to ghcr.io but attendees' forks must sync upstream and publish their own images publicly; GHCR package visibility is critical — without Public access, all deployments fail with ImagePullBackOff
 
 ## Learnings
 
