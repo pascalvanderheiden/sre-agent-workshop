@@ -76,6 +76,27 @@ The alert rule (`scheduledQueryRules`) lives directly in `main.bicep` rather tha
 8. **Application Insights Connection String Unused** — Consider removing or adding App Insights SDK
 9. **Module 5 Error Response Mismatch** — Docs show `"details"` field, app only returns `"error"`
 
+### Container Image Publication Issue — GHCR Deploy Blocker
+**Author:** Rusty | **Date:** 2026-04-23 | **Status:** Diagnosed — requires Pascal action
+
+Pascal's fork is 8 commits behind upstream/main, missing the application source code and the `publish-image.yml` workflow. As a result, no container image exists in GHCR under his account, causing `ImagePullBackOff` in the `deploy-app.yml` rollout.
+
+**Evidence:**
+- `gh run list --workflow=publish-image.yml` returns empty (no runs on fork)
+- Git history shows `src/` commits and `publish-image.yml` only on upstream, not on origin/main
+- Direct GHCR probe returns 403 Forbidden for the image
+- Pod events show authentication failure pulling from GHCR
+
+**Required steps (for Pascal):**
+1. Merge upstream: `git fetch upstream && git merge upstream/main && git push origin main`
+2. Trigger publish-image workflow: `gh workflow run publish-image.yml` (or wait for auto-trigger after push)
+3. Make GHCR package public: GitHub UI (Packages → Package Settings) or CLI with GitHub PAT
+4. Re-trigger deploy-app workflow: `gh workflow run deploy-app.yml`
+
+**Impact:** Blocks all workshop execution until image is published and publicly accessible.
+
+---
+
 ## Governance
 
 - All meaningful changes require team consensus
