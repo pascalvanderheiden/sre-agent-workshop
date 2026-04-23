@@ -45,8 +45,18 @@ jobs:
             --resource-group "rg-${{ env.WORKLOAD }}" \
             --query clientId -o tsv)
 
+          COSMOS_NAME=$(az cosmosdb list \
+            --resource-group "rg-${{ env.WORKLOAD }}" \
+            --query "[?starts_with(name, '${{ env.WORKLOAD }}-cosmos')].name | [0]" -o tsv)
+
+          if [ -z "$COSMOS_NAME" ]; then
+            echo "::error::No CosmosDB account found in rg-${{ env.WORKLOAD }} matching '${{ env.WORKLOAD }}-cosmos*'"
+            exit 1
+          fi
+          echo "Found CosmosDB account: $COSMOS_NAME"
+
           COSMOS_ENDPOINT=$(az cosmosdb show \
-            --name "${{ env.WORKLOAD }}-cosmos" \
+            --name "$COSMOS_NAME" \
             --resource-group "rg-${{ env.WORKLOAD }}" \
             --query documentEndpoint -o tsv)
 
