@@ -10,8 +10,10 @@ param tags object
 // ──────────────────────────────────────────────
 // CosmosDB Account — NoSQL (Core) API, Serverless
 // ──────────────────────────────────────────────
+var cosmosAccountName = '${workloadName}-cosmos-${uniqueString(resourceGroup().id)}'
+
 resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2024-02-15-preview' = {
-  name: '${workloadName}-cosmos'
+  name: cosmosAccountName
   location: location
   tags: tags
   kind: 'GlobalDocumentDB'
